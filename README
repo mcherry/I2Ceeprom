@@ -7,3 +7,30 @@ Tested with 1024Mbit and 256Kbit EEPROM chips from Microchip. Place in your Ardu
 
 24FC1026 - http://www.mouser.com/Search/ProductDetail.aspx?R=24FC1026-I/Pvirtualkey57940000virtualkey579-24FC1026-I/P
 24LC256 - http://www.cutedigi.com/arduino-shields/i2c-eeprom-for-arduino-256kbit.html
+
+Example use:
+
+  #include <Wire.h>
+  #include <I2Ceeprom.h>
+
+  // declare new eeprom object ad address 0x50
+  I2Ceeprom eeprom(0x50);
+
+  // some info to write, default I2C buffer is only 32 bytes FYI
+  char somedata[] = "This is a test";
+  
+  Wire.begin();
+  Serial.begin(9600);
+  
+  eeprom.WritePage(0, (byte *)somedata, sizeof(somedata));
+  
+  int addr = 0;
+  byte b = eeprom.ReadByte(0);
+  
+  while (b != 0)
+  {
+    Serial.print((char)b);
+    addr++;
+    
+    b = eeprom.ReadByte(addr);
+  }
